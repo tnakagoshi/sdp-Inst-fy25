@@ -15,6 +15,9 @@ from django.db.models import Avg
 from django.core.paginator import Paginator
 from .consts import ITEM_PER_PAGE
 
+from django.db.models import Q
+from .forms import SearchForm
+
 
 # Create your views here.
 class ListSuppliesView(LoginRequiredMixin,ListView):
@@ -112,3 +115,33 @@ def index_view(request):
         'supplies/index.html',
         {'object_list': object_list, 'ranking_list': ranking_list, 'page_obj': page_obj},
     )
+
+def search_form_view(request):
+    form = SearchForm()
+    return render(request, 'supplies/search_form.html', {'form': form})
+
+class SearchSuppliesView(ListView):
+    model = Supplies
+    template_name = 'supplies/list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        keyword = self.request.GET.get('keyword')
+        category = self.request.GET.get('category')
+        sort = self.request.GET.get('sort_order')
+
+        # キーワード検索の適用
+        if keyword:
+            queryset = queryset.filter(
+                Q(title__icontains=keyword) | Q(description__icontains=keyword)
+            )
+
+        # カテゴリ選択の適用
+        if category:
+            queryset = queryset.filter(category=category)
+
+        # ソート条件の適用
+        if sort in ['title', '-title', 'category', '-category']:
+            queryset = queryset.order_by(sort)
+
+        return queryset

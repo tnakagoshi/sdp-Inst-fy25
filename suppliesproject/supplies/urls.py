@@ -10,6 +10,7 @@ urlpatterns = [
     path('supplies/<int:supplies_id>/review/', views.CreateReviewView.as_view(), name='create-review'),
     path('', views.index_view, name='index'),
     path('review/<int:pk>/delete/', views.DeleteReviewView.as_view(), name='delete-review'),  
-
+    path('supplies/search_form/', views.search_form_view, name='search-supplies-form'),
+    path('supplies/search/', views.SearchSuppliesView.as_view(), name='search-supplies'),
 ]
 
