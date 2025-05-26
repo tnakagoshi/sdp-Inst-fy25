@@ -12,12 +12,16 @@
 <body>
     
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #006633;">
+
       {% if request.user.is_authenticated %}
         <div class="container-fluid">
           <a class="navbar-brand" href="{% url 'index' %}"><b>社内備品<br>管理システム</b></a>
           <div class="collapse navbar-collapse" id="navbarScroll">
             
             <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'search-supplies-form' %}">備品検索フォーム</a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'list-supplies' %}">備品一覧</a>
               </li>
@@ -37,6 +41,9 @@
         <div class="collapse navbar-collapse" id="navbarScroll">
 
             <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'search-supplies-form' %}">備品検索フォーム</a>
+              </li>
               {% if 'signup' in request.path %}
               <li class="nav-item">
                   <a class="nav-link" href="{% url 'accounts:login' %}">ログイン</a>
