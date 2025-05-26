@@ -4,6 +4,12 @@
 
 {% block content %}
 <div class="p-4 m-4 bg-light border border-success rounded">
+  {% if object.thumbnail %}
+    <img src="{{ object.thumbnail.url }}" class="img-thumbnail" alt="Thumbnail" style="width:100px">
+  {% else %}
+    <p>---画像準備中---</p>
+  {% endif %}
+
   <h2 class="text-success">{{ object.title }}</h2>
   <p>{{ object.description }}</p>
 
@@ -38,4 +44,16 @@
     <h6 class="card-title">{{ object.category }}</h6>
   </div>
 </div>
+
+<!-- 方法１ JavaScriptで変更 -->
+<script>
+  document.getElementsByClassName("img-thumbnail")[0].addEventListener('click', function() {
+    const thumbnail = document.querySelector('.img-thumbnail');
+    if (thumbnail.style.width === '100px') {
+      thumbnail.style = '';
+    } else {
+      thumbnail.style.width = '100px';
+    }
+  });
+</script>
 {% endblock content %}
