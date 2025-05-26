@@ -4,7 +4,7 @@ from django.urls import reverse,reverse_lazy
 # ↓ UpdateViewをインポートする記述を追記
 from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
 # ↓ Reviewをインポートする記述を追記
-from .models import Supplies,Review
+from .models import Supplies,Review,Rental
 # ↓ PermissionDeniedをインポートする記述を追記
 from django.core.exceptions import PermissionDenied
 
@@ -14,7 +14,7 @@ from .models import RATE_CHOICES
 from django.db.models import Avg
 from django.core.paginator import Paginator
 from .consts import ITEM_PER_PAGE
-
+from .forms import RentalModelForm
 
 # Create your views here.
 class ListSuppliesView(LoginRequiredMixin,ListView):
@@ -112,3 +112,32 @@ def index_view(request):
         'supplies/index.html',
         {'object_list': object_list, 'ranking_list': ranking_list, 'page_obj': page_obj},
     )
+
+class CreateRentalView(LoginRequiredMixin, CreateView):
+    model = Rental
+    form_class = RentalModelForm
+    template_name = 'supplies/rental_form.html'
+    #fields = ('quantity', 'start_date', 'end_date')
+    success_url = reverse_lazy('list-rental')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['supplies'] = Supplies.objects.get(pk=self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+        form.instance.supplies = Supplies.objects.get(pk=self.request.POST['supplies'])
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    
+class ListRentalView(LoginRequiredMixin, ListView):
+    model = Rental
+    template_name = 'supplies/rental_list.html'
+
+    # def get_queryset(self):
+    #     return Rental.objects.filter(user=self.request.user).order_by('-start_date')
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['supplies'] = Supplies.objects.all()
+    #     return context

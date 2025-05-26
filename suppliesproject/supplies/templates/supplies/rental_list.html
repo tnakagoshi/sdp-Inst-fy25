@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} 貸出一覧 {% endblock %}
+{% block h1 %} 貸出一覧 {% endblock %}
+
+{% block content %}
+
+<table border="1">
+<tr>
+    <th>備品</th>
+    <th>個数</th>
+    <th>貸出日</th>
+    <th>返却予定日</th>
+</tr>
+{% for item in object_list %}
+<tr>
+    <td>{{item.supplies.title}}</td>
+    <td>{{item.quantity}}</td>
+    <td>{{item.start_date|date:"Y/m/d"}}</td>
+    <td>{{item.end_date|date:"Y/m/d"}}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock content %}

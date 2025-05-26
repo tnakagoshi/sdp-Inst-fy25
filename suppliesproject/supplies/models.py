@@ -38,3 +38,16 @@ class Review(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Rental(models.Model):
+    supplies = models.ForeignKey(Supplies, on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return f"{self.supplies.title} - {self.user.username}"
+    
+    # class Meta:
+    #     unique_together = ('supplies', 'user', 'start_date', 'end_date')
