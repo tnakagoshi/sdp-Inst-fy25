@@ -1,0 +1,5 @@
+# やっていること
+
+- views.pyのSuppliesDetailViewのget_context_data()メソッドでDetailViewのmodelに指定したモデル以外のデータを引っ張ってきて、contextに格納している
+- contextに入れたデータはHTMLテンプレートから参照できる
+- detail.htmlでcontextに入れておいたUserモデル（全レコード）からユーザ情報を一覧表示している

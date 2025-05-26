@@ -14,6 +14,7 @@ from .models import RATE_CHOICES
 from django.db.models import Avg
 from django.core.paginator import Paginator
 from .consts import ITEM_PER_PAGE
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -28,8 +29,15 @@ class DetailSuppliesView(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['rate_choices'] = RATE_CHOICES
+
+        # model属性に指定した以外のモデルのデータを取得しcontextに格納すると、
+        # テンプレートからその内容を参照できる
+        context['user_list'] = User.objects.all()
+
         return context
     # ↑ここまで追記
+
+
 
 class CreateSuppliesView(LoginRequiredMixin,CreateView):
     template_name = 'supplies/create.html'
