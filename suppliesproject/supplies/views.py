@@ -112,3 +112,7 @@ def index_view(request):
         'supplies/index.html',
         {'object_list': object_list, 'ranking_list': ranking_list, 'page_obj': page_obj},
     )
+
+def review_sort_view(request):
+    object_list = Supplies.objects.annotate(avg_rate=Avg('review__rate')).order_by('-avg_rate')
+    return render(request, 'supplies/review_list.html', {'object_list': object_list})

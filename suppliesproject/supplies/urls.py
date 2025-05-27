@@ -10,6 +10,7 @@ urlpatterns = [
     path('supplies/<int:supplies_id>/review/', views.CreateReviewView.as_view(), name='create-review'),
     path('', views.index_view, name='index'),
     path('review/<int:pk>/delete/', views.DeleteReviewView.as_view(), name='delete-review'),  
+    path('supplies/sort', views.review_sort_view, name='sort-reviews'),
 
 ]
 
