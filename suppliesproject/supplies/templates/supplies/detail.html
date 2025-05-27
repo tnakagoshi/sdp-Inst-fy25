@@ -35,6 +35,7 @@
     <a href = "{% url 'update-supplies' object.pk %}" class="btn btn-primary">編集する</a>
     <a href = "{% url 'delete-supplies' object.pk %}" class="btn btn-primary">削除する</a>
     <a href = "{% url 'create-review' object.pk %}" class="btn btn-primary">レビューする</a>
+    <a href = "{% url 'add-order' object.pk %}" class="btn btn-primary">発注予定に追加</a>
     <h6 class="card-title">{{ object.category }}</h6>
   </div>
 </div>

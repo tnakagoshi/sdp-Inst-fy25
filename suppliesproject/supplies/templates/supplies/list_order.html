@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %} 発注管理一覧 {% endblock %}
+{% block h1 %} 発注管理一覧 {% endblock %}
+
+{% block content %}
+
+<form method="post" action="{% url 'apply-orders' %}">
+{% csrf_token %}
+<table>
+    <tr>
+        <th>備品名</th>
+        <th>数量</th>
+    </tr>
+{% for item in object_list %}
+<tr>
+    <td>{{ item.supplies.title }}({{item.status}})</td>
+    <td>
+        {% if item.status %}
+            {{ item.quantity }}
+        {% else %}
+            <input type="number" name="quantity[{{item.pk}}]" value="">
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% if object_list.0.status == False %}
+<button>発注</button>
+{% endif %}
+</form>
+
+{% if object_list.0.status %}
+<form method="post" action="{% url 'complete-orders' %}">
+{% csrf_token %}
+<button>納品完了</button>
+</form> 
+{% endif %}
+
+{% endblock content %}

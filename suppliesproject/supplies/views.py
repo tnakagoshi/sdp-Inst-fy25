@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 # ↓ reverse関数をインポートする記述を追記
 from django.urls import reverse,reverse_lazy
 # ↓ UpdateViewをインポートする記述を追記
 from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
 # ↓ Reviewをインポートする記述を追記
-from .models import Supplies,Review
+from .models import Supplies,Review,SuppliesOrder
 # ↓ PermissionDeniedをインポートする記述を追記
 from django.core.exceptions import PermissionDenied
 
@@ -112,3 +112,50 @@ def index_view(request):
         'supplies/index.html',
         {'object_list': object_list, 'ranking_list': ranking_list, 'page_obj': page_obj},
     )
+
+def create_order_view(request,pk):
+    supplies_order = SuppliesOrder(supplies=Supplies.objects.get(pk=pk),quantity=0,status=False)
+    supplies_order.save()
+
+    return redirect('list-orders')
+
+# class CreateOrderView(LoginRequiredMixin, CreateView):
+#     model = SuppliesOrder
+#     fields = ('title', 'description', 'rate', 'supplies')
+#     template_name = 'supplies/review/create.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['supplies'] = Supplies.objects.get(pk=self.kwargs['pk'])
+#         context['rate_choices'] = RATE_CHOICES
+#         return context
+    
+#     def form_valid(self, form):
+#         form.instance.user = self.request.user
+#         return super().form_valid(form)
+
+#     def get_success_url(self):
+#         return reverse('detail-supplies', kwargs={'pk': self.object.supplies.id})
+
+class ListOrdersView(LoginRequiredMixin,ListView):
+    model = SuppliesOrder
+    template_name = 'supplies/list_order.html'
+
+def apply_order_view(request):
+    if request.method == 'POST':
+        orders = SuppliesOrder.objects.all()
+        for order in orders:
+            quantity = request.POST.get(f'quantity[{order.pk}]')
+            order.quantity = int(quantity) if quantity else 0
+            order.status = True if quantity else False
+            order.save()
+        return redirect('list-orders')
+    else:
+        return redirect('list-orders')
+    
+def complete_order_view(request):
+    if request.method == 'POST':
+        orders = SuppliesOrder.objects.all().delete()
+        return redirect('list-orders')
+    else:
+        return redirect('list-orders')    

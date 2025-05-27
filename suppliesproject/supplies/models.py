@@ -38,3 +38,12 @@ class Review(models.Model):
 
     def __str__(self):
         return self.title
+    
+class SuppliesOrder(models.Model):
+    supplies = models.ForeignKey(Supplies,on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.supplies.title
+
