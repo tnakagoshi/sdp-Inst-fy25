@@ -24,12 +24,18 @@ class ListSuppliesView(LoginRequiredMixin,ListView):
 class DetailSuppliesView(LoginRequiredMixin,DetailView):
     model = Supplies
     template_name = 'supplies/detail.html'
-    # ↓ここから追記
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['rate_choices'] = RATE_CHOICES
+
+        context['avg_rate'] = Review.objects.filter(supplies=self.object).aggregate(Avg('rate'))['rate__avg']
+        context['review_1'] = Review.objects.filter(supplies=self.object, rate=1).count()
+        context['review_2'] = Review.objects.filter(supplies=self.object, rate=2).count()
+        context['review_3'] = Review.objects.filter(supplies=self.object, rate=3).count()
+        context['review_4'] = Review.objects.filter(supplies=self.object, rate=4).count()
+        context['review_5'] = Review.objects.filter(supplies=self.object, rate=5).count()
         return context
-    # ↑ここまで追記
 
 class CreateSuppliesView(LoginRequiredMixin,CreateView):
     template_name = 'supplies/create.html'

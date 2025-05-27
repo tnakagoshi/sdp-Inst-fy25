@@ -36,6 +36,14 @@
     <a href = "{% url 'delete-supplies' object.pk %}" class="btn btn-primary">削除する</a>
     <a href = "{% url 'create-review' object.pk %}" class="btn btn-primary">レビューする</a>
     <h6 class="card-title">{{ object.category }}</h6>
+
+    <h6>レビュー平均：{{avg_rate}}</h6>
+    <h6>レビュー数：{{object.review_set.all.count}}</h6>
+    <h6>評価５：{{review_5}}名</h6>
+    <h6>評価４：{{review_4}}名</h6>
+    <h6>評価３：{{review_3}}名</h6>
+    <h6>評価２：{{review_2}}名</h6>
+    <h6>評価１：{{review_1}}名</h6>
   </div>
 </div>
 {% endblock content %}
